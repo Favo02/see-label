@@ -1,17 +1,55 @@
 import React from "react";
 
-function ImageUploader({ setFile, setSize }) {
-  function handleChange(e) {
-    setFile({
-      url: URL.createObjectURL(e.target.files[0]),
-      blob: new Blob([e.target.files[0]], { type: "image/jpeg" })
-    });
+function ImageUploader({ setFile, setSize, normalizeSize }) {
 
+  function handleChange(e) {
+
+    const MAX_WIDTH = 1000;
+    const MAX_HEIGHT = 1000;
+
+    const file = e.target.files[0];
     const img = new Image();
-    img.src = URL.createObjectURL(e.target.files[0])
-    img.onload = () => {
-      setSize({"w": img.width, "h": img.height})
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      img.src = e.target.result;
+      img.onload = function () {
+        let width = img.width;
+        let height = img.height;
+
+        if (normalizeSize) {
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+        }
+
+        setSize({"w": width, "h": height})
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(function (blob) {
+          setFile({
+            url: URL.createObjectURL(blob),
+            blob: blob,
+          });
+        }, file.type);
+      };
     };
+
+    reader.readAsDataURL(file);
   }
 
   return (
@@ -22,7 +60,7 @@ function ImageUploader({ setFile, setSize }) {
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
           </svg>
           <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPEG</p>
         </div>
         <input id="dropzone-file" type="file" className="hidden" onChange={handleChange} />
       </label>

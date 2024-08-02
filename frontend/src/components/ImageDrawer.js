@@ -4,23 +4,27 @@ import Canvas from "react-canvas-polygons";
 const ImageDrawer = ({ objects, newObjects, onNewObject, image, size }, ref) => {
 
   useEffect(() => {
-    const canvas = ref
-    var ctx = canvas.ctx
+    if (!objects.data) return;
+
+    const ctx = ref.ctx
 
     for (let obj of objects.data) {
       ctx.beginPath();
-      ctx.fillStyle = obj.color + "40"
+      ctx.fillStyle = `${obj.color}40`
       for (let [x, y] of obj.mask_points[0]) {
         ctx.lineTo(x, y);
       }
       ctx.closePath();
       ctx.fill();
 
+      ctx.strokeStyle = obj.color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
       ctx.font = "20px Arial";
-      ctx.fillStyle = "purple";
+      ctx.fillStyle = obj.color;
       ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
     }
-
   }, [])
 
   const [tool, setTool] = useState("Line");
