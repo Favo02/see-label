@@ -13,7 +13,7 @@ function App() {
   const [objects, setObjects] = useState();
   const [newObjects, setNewObjects] = useState();
 
-  const sendFile = async () => {
+  async function sendFile() {
     if (!file) return;
 
     const formData = new FormData();
@@ -36,6 +36,13 @@ function App() {
       console.log(e)
     }
   };
+
+  function reset() {
+    setFile(undefined)
+    setSize(undefined)
+    setObjects(undefined)
+    setNewObjects(undefined)
+  }
 
   return (
     <div className="min-h-screen min-w-screen bg-gradient-to-r from-slate-900 to-sky-950 p-10">
@@ -72,6 +79,8 @@ function App() {
       {(file && objects) && (
         <div>
           <ImageDrawer objects={objects} newObjects={newObjects} onNewObject={setNewObjects} image={file.url} size={size} />
+
+          <button onClick={reset} className={buttonStyle}>Reset</button>
         </div>
       )}
     </div>
