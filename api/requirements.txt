@@ -21,4 +21,3 @@ python-multipart
 pillow~=10.4.0
 ultralytics~=8.2.71
 numpy~=1.26.4
-torch~=2.4.0

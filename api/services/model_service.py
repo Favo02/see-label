@@ -14,8 +14,9 @@ class ModelService:
         self.imagine_path = os.getenv("IMAGE_PATH", "./")
 
     def get_image_elements(self, img_raw, model_name="yolov8m-seg.pt", conf_threshold=0.5) -> List[DetectedObject]:
-        model = YOLO(f"{self.model_path}/{model_name}")
+        print(f"{self.model_path}/{model_name}")
 
+        model = YOLO(f"{self.model_path}/{model_name}")
         img = Image.open(io.BytesIO(img_raw))
 
         results = model(img, conf=conf_threshold)  # results list

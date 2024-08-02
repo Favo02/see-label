@@ -1,5 +1,4 @@
-FROM python:3.10-slim
-
+FROM ultralytics/ultralytics:latest-python
 LABEL authors="matteo bianchi"
 
 WORKDIR /app
