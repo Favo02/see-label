@@ -3,9 +3,11 @@ import ImagePreview from "./components/ImagePreview"
 import React, { useState } from "react";
 
 const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
+const buttonStyle = "text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800"
 
 function App() {
   const [file, setFile] = useState();
+  const [objects, setObjects] = useState();
 
   const sendFile = async () => {
     if (!file) return;
@@ -20,7 +22,7 @@ function App() {
       });
 
       if (response.ok) {
-        console.log(await response.json())
+        setObjects(await response.json())
       } else {
         alert("Error sending file");
       }
@@ -34,28 +36,29 @@ function App() {
       <h1 className="text-7xl font-black text-white w-full text-center">See Label</h1>
 
       {!file && (
-        <div>
-          <h2 className="text-white font-bold text-2xl p-4 mt-10">Upload image:</h2>
+        <div className="mx-auto max-w-[500px]">
+          <h2 className="text-white font-bold text-2xl p-4 mt-10 text-center">Upload image:</h2>
           <ImageUploader setFile={setFile} />
         </div>
       )}
 
-      {file && (
+      {(file && !objects) && (
         <div>
+          <div className="my-10 mx-auto flex flex-row justify-center align-center items-center gap-2">
+            <button onClick={sendFile} className={buttonStyle}>Analyze image: extract objects</button>
+            <button className={buttonStyle}>Import analyzed objects</button>
+            <button onClick={() => setObjects([])} className={buttonStyle}>Manually select objects</button>
+          </div>
+
           <h1 className="text-white">Image uploaded successfully</h1>
           <ImagePreview image={file.url} />
+        </div>
+      )}
 
-          <button onClick={sendFile} type="button" className="text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-            Analyze image: extract objects
-          </button>
 
-          <button type="button" className="text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-            Import analyzed objects
-          </button>
-
-          <button type="button" className="text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-sky-300 dark:focus:ring-sky-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-            Manually select objects
-          </button>
+      {(file && objects) && (
+        <div>
+          {JSON.stringify(objects)}
         </div>
       )}
     </div>
