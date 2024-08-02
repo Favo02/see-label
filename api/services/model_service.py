@@ -13,7 +13,8 @@ class ModelService:
         self.model_path = os.getenv("MODEL_PATH", "./")
         self.imagine_path = os.getenv("IMAGE_PATH", "./")
 
-    def get_image_elements(self, img_raw, model_name="yolov8m-seg.pt", conf_threshold=0.5) -> List[DetectedObject]:
+    def get_image_elements(self, img_raw, model_name="yolov8m-seg.pt", conf_threshold=0.25) -> List[DetectedObject]:
+
         print(f"{self.model_path}/{model_name}")
 
         model = YOLO(f"{self.model_path}/{model_name}")
@@ -29,9 +30,6 @@ class ModelService:
             mask_points = r.masks[f].xy
             boxes_points = r.boxes[f].xyxy
             confidence = r.boxes[f].conf
-            print(f"Found {object_name}")
-            print("Coordinates Mask:", mask_points)
-            print("Coordinates Box:", boxes_points)
 
             detected_object = DetectedObject(clsId, object_name, mask_points, boxes_points, confidence)
             detected_objects.append(detected_object)
