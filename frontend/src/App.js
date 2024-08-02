@@ -8,6 +8,7 @@ const buttonStyle = "text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 fo
 
 function App() {
   const [file, setFile] = useState();
+  const [size, setSize] = useState();
   const [objects, setObjects] = useState();
   const [newObjects, setNewObjects] = useState();
 
@@ -42,7 +43,7 @@ function App() {
       {!file && (
         <div className="mx-auto max-w-[500px]">
           <h2 className="text-white font-bold text-2xl p-4 mt-10 text-center">Upload image:</h2>
-          <ImageUploader setFile={setFile} />
+          <ImageUploader setFile={setFile} setSize={setSize} />
         </div>
       )}
 
@@ -62,7 +63,7 @@ function App() {
 
       {(file && objects) && (
         <div>
-          <ImageDrawer objects={objects} newObjects={newObjects} onNewObject={setNewObjects} image={file.url} />
+          <ImageDrawer objects={objects} newObjects={newObjects} onNewObject={setNewObjects} image={file.url} size={size} />
         </div>
       )}
     </div>

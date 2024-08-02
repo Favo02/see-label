@@ -1,11 +1,17 @@
 import React from "react";
 
-function ImageUploader({ setFile }) {
+function ImageUploader({ setFile, setSize }) {
   function handleChange(e) {
     setFile({
       url: URL.createObjectURL(e.target.files[0]),
       blob: new Blob([e.target.files[0]], { type: "image/jpeg" })
     });
+
+    const img = new Image();
+    img.src = URL.createObjectURL(e.target.files[0])
+    img.onload = () => {
+      setSize({"w": img.width, "h": img.height})
+    };
   }
 
   return (
