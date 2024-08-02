@@ -6,15 +6,19 @@ const ImageDrawer = ({ objects, newObjects, onNewObject, image, size }, ref) => 
   useEffect(() => {
     const canvas = ref
     var ctx = canvas.ctx
-    ctx.fillStyle = "rgba(0, 72, 255, 0.20)";
 
     for (let obj of objects.data) {
       ctx.beginPath();
+      ctx.fillStyle = obj.color + "40"
       for (let [x, y] of obj.mask_points[0]) {
         ctx.lineTo(x, y);
       }
       ctx.closePath();
       ctx.fill();
+
+      ctx.font = "20px Arial";
+      ctx.fillStyle = "purple";
+      ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
     }
 
   }, [])
