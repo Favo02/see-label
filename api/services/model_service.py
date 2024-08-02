@@ -13,25 +13,23 @@ class ModelService:
         self.model_path = os.getenv("MODEL_PATH", "./")
         self.imagine_path = os.getenv("IMAGE_PATH", "./")
 
-    def get_image_elements(self, img_raw, model_name="yolov8m-seg.pt", conf_threshold=0.25) -> List[DetectedObject]:
-
-        print(f"{self.model_path}/{model_name}")
+    def get_image_elements(self, img_raw, model_name="yolov8x-seg.pt", conf_threshold=0.25) -> List[DetectedObject]:
 
         model = YOLO(f"{self.model_path}/{model_name}")
         img = Image.open(io.BytesIO(img_raw))
 
-        results = model(img, conf=conf_threshold)  # results list
+        results = iter(model(img, conf=conf_threshold))  # results list
         detected_objects = []
-        # Visualize the results
-        r = results[0]
-        for f, box in enumerate(r.boxes):
-            clsId = box.cls.item()
-            object_name = model.names[clsId]
-            mask_points = r.masks[f].xy
-            boxes_points = r.boxes[f].xyxy
-            confidence = r.boxes[f].conf
 
-            detected_object = DetectedObject(clsId, object_name, mask_points, boxes_points, confidence)
+        r = next(results)
+        for index, box in enumerate(r.boxes):
+            classId = box.cls.item()
+            object_name = model.names[classId]
+            mask_points = r.masks[index].xy
+            boxes_points = r.boxes[index].xyxy
+            confidence = r.boxes[index].conf
+
+            detected_object = DetectedObject(classId, object_name, mask_points, boxes_points, confidence)
             detected_objects.append(detected_object)
 
         return detected_objects
