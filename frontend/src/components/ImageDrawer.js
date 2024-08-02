@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Canvas from "react-canvas-polygons";
 
-const DrawCanvas = ({ initialData, onChange, image }, ref) => {
+const ImageDrawer = ({ objects, newObjects, onNewObject, image }, ref) => {
 
-  console.log("IN CANVAS", initialData)
+  console.log("IN CANVAS", newObjects)
 
   const [tool, setTool] = useState("Line");
   const handleCleanCanva = (e) => {
@@ -32,12 +32,12 @@ const DrawCanvas = ({ initialData, onChange, image }, ref) => {
         height={800}
         width={800}
         tool={tool}
-        onDataUpdate={(data) => onChange(data)}
-        onFinishDraw={(data) => onChange(data)}
-        initialData={initialData}
+        onDataUpdate={(data) => onNewObject(data)}
+        onFinishDraw={(data) => onNewObject(data)}
+        initialData={newObjects}
       />
     </div>
   );
 };
 
-export default DrawCanvas;
+export default ImageDrawer;

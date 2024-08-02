@@ -1,7 +1,7 @@
 import ImageUploader from "./components/ImageUploader"
 import ImagePreview from "./components/ImagePreview"
+import ImageDrawer from "./components/ImageDrawer";
 import React, { useState } from "react";
-import DrawCanvas from "./draw";
 
 const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
 const buttonStyle = "text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800"
@@ -9,7 +9,7 @@ const buttonStyle = "text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 fo
 function App() {
   const [file, setFile] = useState();
   const [objects, setObjects] = useState();
-  const [points, setPoints] = useState(); // TODO temp
+  const [newObjects, setNewObjects] = useState();
 
   const sendFile = async () => {
     if (!file) return;
@@ -62,7 +62,7 @@ function App() {
 
       {(file && objects) && (
         <div>
-          <DrawCanvas initialData={points} onChange={setPoints} image={file.url} />
+          <ImageDrawer objects={objects} newObjects={newObjects} onNewObject={setNewObjects} image={file.url} />
         </div>
       )}
     </div>
