@@ -16,3 +16,7 @@
 ### Deployment
 
 ### Demo
+
+### TODO
+
+- usare ESLint per migliorare la qualità del codice
