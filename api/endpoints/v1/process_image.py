@@ -1,6 +1,5 @@
-from fastapi import APIRouter
 import logging
-from fastapi import FastAPI, File, UploadFile
+from fastapi import APIRouter, File, UploadFile
 from starlette.responses import JSONResponse
 
 from services.model_service import get_model_service
