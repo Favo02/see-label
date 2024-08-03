@@ -32,9 +32,6 @@ A live demo is available at: `<url>`
 
 ### TODO
 
-- filtri
-- import
-- export immagine+objects in unico file
-- validare poligoni (self intersection)
+- import image base64
 - frontend notifications
 - remove todos
