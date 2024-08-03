@@ -52,6 +52,16 @@ function App() {
     }
   }
 
+  function importObjects(e) {
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8")
+    fileReader.onload = e => {
+      const objectsJson = JSON.parse(e.target.result)
+      setObjects(objectsJson)
+      setFiltered(objectsJson)
+    }
+  }
+
   function checkValidPolygon(points) {
     const box = {type: 'Polygon', coordinates: [points]}
     return noIntersections(box)
@@ -165,8 +175,15 @@ function App() {
 
         <div className="mx-auto flex flex-row justify-center align-center items-center gap-2">
           <button onClick={apiCall} className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Automatically extract objects</button>
+
           <button onClick={() => { setObjects([]); setFiltered([])} } className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Manually select objects</button>
-          <button className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Import analyzed objects</button>
+
+          <div className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">Import analyzed objects</label>
+            <input id="file_input" type="file" onChange={importObjects}
+                aria-describedby="file_input_help" className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+          </div>
+
           <button onClick={reset} className="text-white text-lg font-bold bg-red-700 hover:bg-red-800 rounded-lg text-sm px-5 py-2.5">Reset</button>
         </div>
         <ImagePreview image={image.url} />
