@@ -26,3 +26,4 @@
 - validare poligoni (self intersection)
 - togliere clsId dall'API
 - togliere doppio array intorno a mask_points dall'API
+- frontend notifications
