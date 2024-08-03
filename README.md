@@ -1,6 +1,6 @@
-## [Name TBD] - NOI Hackathon 2024 Summer edition
+## See Label - NOI Hackathon 2024 Summer edition
 
-> Our solution for challenge offered by **_[TBD]_** at **[NOI Hackathon 2024 Summer edition](https://hackathon.bz.it)**.
+> Our solution for challenge offered by **_Gruppo FOS_** at **[NOI Hackathon 2024 Summer edition](https://hackathon.bz.it)**.
 
 ### The challenge
 
@@ -20,3 +20,6 @@
 ### TODO
 
 - usare ESLint per migliorare la qualità del codice
+- filtri
+- import / export
+- validare poligoni (self intersection)
