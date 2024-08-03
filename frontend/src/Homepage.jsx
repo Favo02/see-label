@@ -22,109 +22,6 @@ function App() {
     const [popupIsOpen, setPopupIsOpen] = useState(false); //Hooks used to manage the label popup
     const [popupCallback, setPopupCallback] = useState(null);
 
-<<<<<<< HEAD
-  function reset() {
-    setImage(undefined)
-    setImageSize(undefined)
-    setObjects(undefined)
-  }
-
-  async function apiCall() {
-    if (!image) return
-
-    const formData = new FormData()
-    formData.append("file", image.blob)
-
-    try {
-      setLoading(true)
-      const response = await fetch(API_ENDPOINT, {
-        method: "POST",
-        body: formData,
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setObjects(data.data)
-        setFiltered(data.data)
-      } else {
-        alert("Error sending file")
-      }
-    } catch (e) {
-      alert("Error sending file")
-      console.log(e)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  function importObjects(e) {
-    const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8")
-    fileReader.onload = e => {
-      const objectsJson = JSON.parse(e.target.result)
-      setObjects(objectsJson.objects)
-      setFiltered(objectsJson.objects)
-    }
-  }
-
-  function checkValidPolygon(points) {
-    const box = {type: 'Polygon', coordinates: [points]}
-    return noIntersections(box)
-  }
-
-  function newDrawnPolygon(data) {
-    const points = data[Object.keys(data).find(key => key.startsWith("Polygon"))];
-    if(!points || points.length < 3 || !checkValidPolygon(points)){
-      alert("The polygon is not valid");
-      const testObject = {
-          color: "#ff0000",
-          confidence: 1,
-          object_name: "__INVALIDPOLYGON__",
-          mask_points: []
-      };
-      setRefresh(!refresh);
-      return;
-    }
-    const label = prompt("Insert label").toLowerCase();
-    let polygonColor= MANUAL_COLORS[Math.floor(Math.random() * MANUAL_COLORS.length)];
-    for (const object of objects){
-        if (object.object_name === label){
-            polygonColor = object.color;
-            break;
-        }
-    }
-    const newObject = {
-      color: polygonColor,
-      confidence: 1,
-      object_name: label,
-      mask_points: points
-    }
-    setObjects([...objects, newObject])
-    setFiltered([...filtered, newObject])
-  }
-
-  function updateConfidence(confidence) {
-    setFiltered(objects.filter(obj => obj.confidence >= confidence))
-    setConfidence(confidence)
-  }
-
-  function updateFilters(objectName) {
-    if (filtered.find(obj => obj.object_name === objectName)) {
-      setFiltered(filtered.filter(obj => obj.object_name !== objectName))
-    } else {
-      setFiltered([...filtered, ...objects.filter(obj => obj.object_name === objectName)])
-    }
-  }
-
-  async function exportImageObjects(withImage) {
-
-    function blobToBase64(blob) {
-      return new Promise((resolve, _) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-=======
     const toastOptions = {
       position: "top-center",
       autoClose: 1800,
@@ -135,7 +32,6 @@ function App() {
       progress: undefined,
       theme: "dark",
       transition: Bounce,
->>>>>>> origin/feat/toast
     }
 
     const [loading, setLoading] = useState(false) // something is loading (an API call probabily)
