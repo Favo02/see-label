@@ -1,6 +1,7 @@
 import ImageUploader from "./components/ImageUploader"
 import ImagePreview from "./components/ImagePreview"
 import ImageDrawer from "./components/ImageDrawer"
+import JsonUploader from "./components/JsonUploader"
 import React, { useState } from "react"
 import noIntersections from "shamos-hoey";
 
@@ -70,7 +71,7 @@ function App() {
 
   function newDrawnPolygon(data) {
     const points = data[Object.keys(data).find(key => key.startsWith("Polygon"))];
-    if(!checkValidPolygon(points)){
+    if(!points || points.length < 3 || !checkValidPolygon(points)){
       alert("The polygon is not valid");
       const testObject = {
           color: "#ff0000",
@@ -144,6 +145,9 @@ function App() {
 
         <ImageUploader setFile={setImage} setSize={setImageSize} normalizeSize={normalizeSize} />
 
+       
+
+
         <h1 className="text-white text-md font-bold italic text-center py-4">NOTE: You will be able to import objects later</h1>
 
         <div className="flex justify-center items-center">
@@ -153,7 +157,7 @@ function App() {
             <span className="ms-3 text-lg font-bold text-white dark:text-gray-300">Normalize image size</span>
           </label>
         </div>
-
+        <JsonUploader setFile={setImage} setSize={setImageSize} />
       </div>
     )
   }
