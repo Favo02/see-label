@@ -178,11 +178,11 @@ function App() {
         return (
             <div className="mx-auto max-w-[500px]">
                 <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">To get started, please upload an
-                    image</h1>
+                    image or an exported JSON Image</h1>
 
                 <ImageUploader setFile={setImage} setSize={setImageSize} setObjects={setObjects} setFiltered={setFiltered} normalizeSize={normalizeSize}/>
 
-                <h1 className="text-white text-md font-bold italic text-center py-4">NOTE: You will be able to import
+                <h1 className="text-white text-md font-bold italic text-center py-4">NOTE: You will also be able to import
                     objects later</h1>
 
                 <div className="flex justify-center items-center">
