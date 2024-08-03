@@ -3,7 +3,7 @@ import ImagePreview from "./components/ImagePreview"
 import ImageDrawer from "./components/ImageDrawer"
 import React, { useState } from "react"
 
-const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
+const API_ENDPOINT = "http://api:8000/api/v1/image-data"
 
 function App() {
   const [image, setImage] = useState() // image to elaborate (uploaded by user)

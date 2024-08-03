@@ -19,7 +19,6 @@
 
 ### TODO
 
-- usare ESLint per migliorare la qualità del codice
 - filtri
 - import
 - export immagine+objects in unico file
