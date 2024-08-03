@@ -86,6 +86,7 @@ class ModelService:
         color_service = ColorService(len(model.names))
 
         r = next(results)
+        # Iterate over every element and using the index and the box from each row to create the response
         for index, box in enumerate(r.boxes):
             classId = box.cls.item()
             color = color_service.get_color(classId)
@@ -94,7 +95,7 @@ class ModelService:
             boxes_points = r.boxes[index].xyxy
             confidence = r.boxes[index].conf
 
-            detected_object = DetectedObject(classId, object_name, mask_points, boxes_points, confidence, color)
+            detected_object = DetectedObject(object_name, mask_points, boxes_points, confidence, color)
             detected_objects.append(detected_object)
 
         return detected_objects
