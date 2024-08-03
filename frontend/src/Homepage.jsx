@@ -82,13 +82,9 @@ function App() {
       return;
     }
     const label = prompt("Insert label").toLowerCase();
-    console.log("label: ", label);
     let polygonColor= MANUAL_COLORS[Math.floor(Math.random() * MANUAL_COLORS.length)];
     for (const object of objects){
-        console.log("object: ", object);
-        console.log("obj name: ", object.object_name);
         if (object.object_name === label){
-            console.log("found match");
             polygonColor = object.color;
             break;
         }
