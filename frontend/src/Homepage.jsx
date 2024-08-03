@@ -5,6 +5,7 @@ import React, { useState } from "react"
 import noIntersections from "shamos-hoey";
 
 const API_ENDPOINT = "/api/v1/image-data"
+const MANUAL_COLORS = ["#fcba03", "#32a852", "#eb4034", "#4287f5", "#7442c9", "#38a676", "#bf6215"];
 
 function App() {
   const [image, setImage] = useState() // image to elaborate (uploaded by user)
@@ -74,15 +75,26 @@ function App() {
       const testObject = {
           color: "#ff0000",
           confidence: 1,
-          object_name: "TESTING",
+          object_name: "__INVALIDPOLYGON__",
           mask_points: []
       };
       setRefresh(!refresh);
       return;
     }
-    const label = prompt("Insert label");
+    const label = prompt("Insert label").toLowerCase();
+    console.log("label: ", label);
+    let polygonColor= MANUAL_COLORS[Math.floor(Math.random() * MANUAL_COLORS.length)];
+    for (const object of objects){
+        console.log("object: ", object);
+        console.log("obj name: ", object.object_name);
+        if (object.object_name === label){
+            console.log("found match");
+            polygonColor = object.color;
+            break;
+        }
+    }
     const newObject = {
-      color: "#ff0000",
+      color: polygonColor,
       confidence: 1,
       object_name: label,
       mask_points: points
