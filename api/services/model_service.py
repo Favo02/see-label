@@ -58,7 +58,6 @@ class ModelService:
             self.image_path = os.getenv("IMAGE_PATH", "./")
             self.initialized = True
 
-
     def get_image_elements(self, img_raw, model_name="yolov8x-seg.pt", conf_threshold=0.25) -> List[DetectedObject]:
         """
         Processes an image to detect objects using the specified YOLO model.
@@ -82,6 +81,8 @@ class ModelService:
 
         results = iter(model(img, conf=conf_threshold))  # results list
         detected_objects = []
+
+        # Utility class to make sure every detected object has an unique color per category
         color_service = ColorService(len(model.names))
 
         r = next(results)
