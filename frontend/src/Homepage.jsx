@@ -88,15 +88,29 @@ function App() {
 
     async function newDrawnPolygon(data) {
         const points = data[Object.keys(data).find(key => key.startsWith("Polygon"))];
-        if (!checkValidPolygon(points)) {
+
+        if(!points || points.length < 3 || !checkValidPolygon(points)){
             toast.error('Invalid annotation', toastOptions);
+            setRefresh(!refresh);
+            const testObject = {
+                color: "#ff0000",
+                confidence: 1,
+                object_name: "__INVALIDPOLYGON__",
+                mask_points: []
+            };
             setRefresh(!refresh);
             return;
         }
-        const label = await promptAsync();
-
+        const label = (await promptAsync()).toLowerCase();
+        let polygonColor= MANUAL_COLORS[Math.floor(Math.random() * MANUAL_COLORS.length)];
+        for (const object of objects){
+            if (object.object_name === label){
+                polygonColor = object.color;
+                break;
+            }
+        }
         const newObject = {
-            color: "#ff0000",
+            color: polygonColor,
             confidence: 1,
             object_name: label,
             mask_points: points
