@@ -9,8 +9,6 @@ class DetectedObject:
 
     Attributes
     ----------
-    cls_id : int
-        The class ID of the detected object.
     object_name : str
         The name of the detected object.
     mask_points : list
@@ -28,15 +26,13 @@ class DetectedObject:
         Converts the detected object to a dictionary format.
     """
 
-    def __init__(self, cls_id: int, object_name: str, mask_points, boxes_points: Union[np.ndarray, List],
+    def __init__(self, object_name: str, mask_points, boxes_points: Union[np.ndarray, List],
                  confidence: float, color: str):
         """
         Constructs all the necessary attributes for the DetectedObject object.
 
         Parameters
         ----------
-        cls_id : int
-            The class ID of the detected object.
         object_name : str
             The name of the detected object.
         mask_points : list
@@ -48,7 +44,6 @@ class DetectedObject:
         color : str
             The color assigned to the detected object.
         """
-        self.cls_id = cls_id
         self.object_name = object_name
         # Convert mask points to list of lists
         self.mask_points = [obj.tolist() for obj in mask_points]
@@ -67,7 +62,6 @@ class DetectedObject:
             A dictionary containing all the attributes of the detected object.
         """
         return {
-            "clsId": self.cls_id,
             "object_name": self.object_name,
             "mask_points": self.mask_points,
             "boxes_points": self.boxes_points.tolist() if isinstance(self.boxes_points,
