@@ -3,7 +3,7 @@ import ImagePreview from "./components/ImagePreview"
 import ImageDrawer from "./components/ImageDrawer"
 import React, { useState } from "react"
 
-const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
+const API_ENDPOINT = "http://172.17.0.2:8000/api/v1/image-data"
 
 function App() {
   const [image, setImage] = useState() // image to elaborate (uploaded by user)
@@ -75,6 +75,16 @@ function App() {
     }
   }
 
+  function importObjects(e){
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = e => {
+      const objectsJson = JSON.parse(e.target.result);
+      setObjects(objectsJson);
+      setFiltered(objectsJson);
+    };
+  }
+
   if (!image) {
     return (
       <div className="mx-auto max-w-[500px]">
@@ -103,12 +113,22 @@ function App() {
         <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">Loading...</h1>
 
         <div className="mx-auto flex flex-row justify-center align-center items-center gap-2">
-          <button disabled onClick={apiCall} className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Automatically extract objects</button>
-          <button disabled onClick={() => { setObjects([]); setFiltered([])} } className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Manually select objects</button>
-          <button disabled className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Import analyzed objects</button>
-          <button disabled onClick={reset} className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Reset</button>
+          <button disabled onClick={apiCall}
+                  className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Automatically
+            extract objects
+          </button>
+          <button disabled onClick={() => {
+            setObjects([]);
+            setFiltered([])
+          }}
+                  className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Manually
+            select objects
+          </button>
+          <button disabled onClick={reset}
+                  className="text-white text-lg font-bold bg-gray-700 hover:bg-gray-700 rounded-lg text-sm px-5 py-2.5">Reset
+          </button>
         </div>
-        <ImagePreview image={image.url} />
+        <ImagePreview image={image.url}/>
       </div>
     )
   }
@@ -120,27 +140,51 @@ function App() {
         <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">Available actions</h1>
 
         <div className="mx-auto flex flex-row justify-center align-center items-center gap-2">
-          <button onClick={apiCall} className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Automatically extract objects</button>
-          <button onClick={() => { setObjects([]); setFiltered([])} } className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Manually select objects</button>
-          <button className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Import analyzed objects</button>
-          <button onClick={reset} className="text-white text-lg font-bold bg-red-700 hover:bg-red-800 rounded-lg text-sm px-5 py-2.5">Reset</button>
+          <button onClick={apiCall}
+                  className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Automatically
+            extract objects
+          </button>
+          <button onClick={() => {
+            setObjects([]);
+            setFiltered([])
+          }}
+                  className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Manually
+            select objects
+          </button>
+          <div className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">
+            {/* className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5"*/}
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">Import analyzed objects</label>
+            <input id="file_input" type="file" onChange={importObjects}
+                aria-describedby="file_input_help" className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+          </div>
+          <button onClick={reset}
+                  className="text-white text-lg font-bold bg-red-700 hover:bg-red-800 rounded-lg text-sm px-5 py-2.5">Reset
+          </button>
         </div>
-        <ImagePreview image={image.url} />
+        <ImagePreview image={image.url}/>
       </div>
     )
   }
 
   return (
-    <div>
+      <div>
 
-      <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">Click on the image to manually add polygons or Apply some filters</h1>
+        <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">Click on the image to manually add polygons
+          or Apply some filters</h1>
 
       <div className="mx-auto flex flex-row justify-center align-center items-center gap-2">
-        <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json" className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export Objects only (JSON)</a>
-        <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json" className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export Image + Objects (JSON)</a>
-        <button onClick={reset} className="text-white text-lg font-bold bg-red-700 hover:bg-red-800 rounded-lg text-sm px-5 py-2.5">Reset</button>
+        <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json"
+           className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export
+          Objects only (JSON)</a>
+        <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json"
+           className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export
+          Image + Objects (JSON)</a>
+        <button onClick={reset}
+                className="text-white text-lg font-bold bg-red-700 hover:bg-red-800 rounded-lg text-sm px-5 py-2.5">Reset
+        </button>
       </div>
-      <h1 className="text-white text-md font-bold italic text-center pt-2">NOTE: Only objects NOT filtered out will be exported</h1>
+      <h1 className="text-white text-md font-bold italic text-center pt-2">NOTE: Only objects NOT filtered out will be
+        exported</h1>
 
       <div className="w-full flex flex-row mt-4">
 
