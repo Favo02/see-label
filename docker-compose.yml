@@ -5,4 +5,5 @@ services:
     ports:
       - 3004:8000
     environment:
-      - MODEL_NAME=yolov8x-seg.pt
+      - MODEL_NAME=yolov9e-seg.pt
+   #  - MODEL_NAME=yolov8x-seg.pt
