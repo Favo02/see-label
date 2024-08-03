@@ -7,7 +7,7 @@ Backend of the SeeLabel used to retrieve elements within the given images via YO
 
 The service exposes a REST API at `POST /api/v1/image-data`, where an image can be passed to the YOLO model to label the objects within. Clients can also set two optional parameters:
 
-- `model_name`: The name of the YOLO model to use (default is `yolov8x-seg.pt`).
+- `model_name`: The name of the YOLO model to use (default is `yolov9e-seg.pt`).
 - `confidence_threshold`: Filters the detected objects based on their confidence score (default is `0.25`).
 
 ### Example Request
