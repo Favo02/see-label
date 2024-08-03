@@ -19,10 +19,5 @@
 
 ### TODO
 
-- filtri
-- import
-- export immagine+objects in unico file
-- validare poligoni (self intersection)
-- togliere clsId dall'API
-- togliere doppio array intorno a mask_points dall'API
+- import image base64
 - frontend notifications
