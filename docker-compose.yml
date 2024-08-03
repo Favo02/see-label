@@ -4,3 +4,5 @@ services:
     build: .
     ports:
       - 3004:8000
+    environment:
+      - MODEL_NAME=YOLOv8x-seg.pt
