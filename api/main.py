@@ -21,9 +21,10 @@ app.add_middleware(
 
 # Mapping of the other endpoints defined under /endpoints/v1/...
 app.include_router(api_router, prefix="/api")
-app.mount("/", StaticFiles(directory="build", html = True), name="Frontend")
+app.mount("/", StaticFiles(directory="build", html=True), name="Frontend")
+
+
 # Health check endpoint
 @app.get("/status")
 async def root():
     return {"status": "up"}
-
