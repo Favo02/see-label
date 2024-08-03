@@ -1,6 +1,7 @@
 # API 
 
-Backend of the SeeLabel used to retrieve elements within the given images via YOLO vision models
+Backend of the SeeLabel used to retrieve elements within the given images via YOLO vision models and return labels, mask coordinates, colors to the client
+
 
 ## Usage
 
@@ -155,6 +156,17 @@ A Response would be an array of Detected objects like this:
   "color": "#aec7e8"
 }
 ```
+## Noteworthy Components
+
+| File                                                                                                    | Description                                                                   |
+|---------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| [main](https://github.com/Favo02/see-label/blob/main/api/main.py)                                       | Entry point for the FastApi application, it maps all the endpoints under /api |
+| [process_image](https://github.com/Favo02/see-label/blob/main/api/endpoints/v1/process_image.py)        | endpoint that labels object of the given image                                |
+| [model_service](https://github.com/Favo02/see-label/blob/main/api/services/model_service.py)            | service class that implements the logic required to label and output the data |
+| [color_service](https://github.com/Favo02/see-label/blob/main/api/services/color_service.py)            | service class used to generate colors for the masks on the UI                 |
+| [detected_object](https://github.com/Favo02/see-label/blob/main/api/dto/detected_object.py)             | Object representing a detected object                                         |
+| [image_process_request](https://github.com/Favo02/see-label/blob/main/api/dto/image_process_request.py) | Optional request body for the process_image endpoint                          |
+
 ## Frameworks:
 
 ![FastApi](https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png) ![PyTorch](https://raw.githubusercontent.com/pytorch/pytorch/main/docs/source/_static/img/pytorch-logo-dark.png)
