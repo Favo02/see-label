@@ -42,11 +42,10 @@ function App() {
     setObjects(undefined)
   }
 
-  function test(data) {
-    console.log("data", data)
+  function onNewPolygon(data) {
     const label = prompt("Insert label")
     const newObject = {
-      color: "#f00",
+      color: "#ff0000",
       confidence: 1,
       object_name: label,
       mask_points: [data[Object.keys(data).find(key => key.startsWith("Polygon"))]]
@@ -90,7 +89,7 @@ function App() {
             <button onClick={reset} className={buttonStyle}>Reset</button>
           </div>
 
-          <ImageDrawer objects={objects} image={file.url} size={size} onNewPolygon={test} />
+          <ImageDrawer objects={objects} image={file.url} size={size} onNewPolygon={onNewPolygon} />
 
         </div>
       )}

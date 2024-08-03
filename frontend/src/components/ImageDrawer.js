@@ -14,29 +14,28 @@ const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
 
 
     if (objects) {
+      const ctx = ref.ctx
 
       for (let obj of objects) {
-        const ctx = ref.ctx
+
+        // polygon fill
+        ctx.fillStyle = `${obj.color}40`
         ctx.beginPath();
-
-        ctx.fillStyle = obj.color
-        ctx.font = "20px Arial";
-        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
-
-        console.log("A", ctx.fillStyle)
-
-        ctx.fillStyle = obj.color + "40"
         for (let [x, y] of obj.mask_points[0]) {
           ctx.lineTo(x, y);
         }
         ctx.fill();
-        // ctx.closePath();
+        ctx.closePath();
 
-        console.log("B", ctx.fillStyle)
-
+        // outline
         ctx.strokeStyle = obj.color;
         ctx.lineWidth = 2;
         ctx.stroke();
+
+        // label text
+        ctx.fillStyle = obj.color
+        ctx.font = "20px Arial";
+        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
       }
     }
 
