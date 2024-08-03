@@ -1,14 +1,6 @@
 services:
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+  seelabel:
+    container_name: seelabel
+    build: .
     ports:
-      - 8000:8000
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - 8001:8001
+      - 3004:8000

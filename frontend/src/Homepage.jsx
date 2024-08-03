@@ -4,7 +4,7 @@ import ImageDrawer from "./components/ImageDrawer"
 import React, { useState } from "react"
 import noIntersections from "shamos-hoey";
 
-const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
+const API_ENDPOINT = "/api/v1/image-data"
 
 function App() {
   const [image, setImage] = useState() // image to elaborate (uploaded by user)
@@ -57,8 +57,8 @@ function App() {
     fileReader.readAsText(e.target.files[0], "UTF-8")
     fileReader.onload = e => {
       const objectsJson = JSON.parse(e.target.result)
-      setObjects(objectsJson)
-      setFiltered(objectsJson)
+      setObjects(objectsJson.objects)
+      setFiltered(objectsJson.objects)
     }
   }
 
