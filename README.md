@@ -23,6 +23,10 @@ For further details, please refer to the README files located in the `/api` and 
 ### Deployment
 
 Both the API and the frontend come with a Dockerfile, enabling you to run the entire application using Docker Compose with the provided `docker-compose.yml` file.
+- `docker-compose up -d`
+
+To rebuild after changes: 
+- `docker compose up --force-recreate --build`
 
 Both the UI and the API can be accessed from `http://localhost:3004`.
 
