@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-class ColorService():
+class ColorService:
     def __init__(self, num_colors=80):
         self.num_colors = num_colors
         self.colors = self.generate_colors()
@@ -13,8 +13,8 @@ class ColorService():
         extended_colors = []
 
         for i in range(self.num_colors):
-            color_idx = i % num_base_colors
-            variation = i // num_base_colors
+            color_idx = (i+1) % num_base_colors
+            variation = (i+1) // num_base_colors
             base_color = np.array(tab20[color_idx])
             varied_color = (base_color + np.array([variation * 0.1, 0, 0])) % 1.0
             hex_color = self.rgb_to_hex(varied_color)
