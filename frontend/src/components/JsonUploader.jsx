@@ -1,44 +1,27 @@
 import React from "react"
 
-function JsonUploader({ setFile, setSize }) {
+function JsonUploader({ setFile, setSize, setObjects }) {
 
-  // scale down image if too big (and normalizeSize flag on)
   function handleChange(e) {
-    console.log(e)
-    const MAX_WIDTH = 1000
-    const MAX_HEIGHT = 1000
 
     const file = e.target.files[0]
-    const img = new Image()
     const reader = new FileReader()
 
     reader.onload = function (e) {
-      console.log(e)
-      img.src = e.target.result
-      img.onload = function () {
-        let width = img.width
-        let height = img.height
 
+      const text = e.target.result
+      const json = JSON.parse(text)
 
-        setSize({"w": width, "h": height})
+      setObjects(json.objects)
 
-        const canvas = document.createElement("canvas")
-        canvas.width = width
-        canvas.height = height
-
-        const ctx = canvas.getContext("2d")
-        ctx.drawImage(img, 0, 0, width, height)
-
-        canvas.toBlob(function (blob) {
-          setFile({
-            url: URL.createObjectURL(blob),
-            blob: blob,
-          })
-        }, file.type)
-      }
+      fetch(json.image)
+        .then(res => {
+          res.blob()
+        })
+        .then(blob => setFile({ url: URL.createObjectURL(blob), blob }))
     }
 
-    reader.readAsDataURL(file)
+    reader.readAsText(file)
   }
 
   return (
@@ -51,7 +34,7 @@ function JsonUploader({ setFile, setSize }) {
           <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
           <p className="text-xs text-gray-500 dark:text-gray-400">JSON</p>
         </div>
-        <input id="dropzone-file" type="file" className="hidden" onChange={handleChange} />
+        <input type="file" className="hidden" onChange={handleChange} />
       </label>
     </div>
   )

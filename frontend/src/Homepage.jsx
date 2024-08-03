@@ -145,9 +145,6 @@ function App() {
 
         <ImageUploader setFile={setImage} setSize={setImageSize} normalizeSize={normalizeSize} />
 
-       
-
-
         <h1 className="text-white text-md font-bold italic text-center py-4">NOTE: You will be able to import objects later</h1>
 
         <div className="flex justify-center items-center">
@@ -157,7 +154,8 @@ function App() {
             <span className="ms-3 text-lg font-bold text-white dark:text-gray-300">Normalize image size</span>
           </label>
         </div>
-        <JsonUploader setFile={setImage} setSize={setImageSize} />
+
+        <JsonUploader setFile={setImage} setSize={setImageSize} setObjects={setObjects} />
       </div>
     )
   }
