@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from endpoints import router as api_router
 
@@ -20,9 +21,9 @@ app.add_middleware(
 
 # Mapping of the other endpoints defined under /endpoints/v1/...
 app.include_router(api_router, prefix="/api")
-
+app.mount("/", StaticFiles(directory="build", html = True), name="Frontend")
 # Health check endpoint
-@app.get("/")
+@app.get("/status")
 async def root():
     return {"status": "up"}
 
