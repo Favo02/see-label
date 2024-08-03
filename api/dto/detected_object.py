@@ -46,7 +46,7 @@ class DetectedObject:
         """
         self.object_name = object_name
         # Convert mask points to list of lists
-        self.mask_points = [obj.tolist() for obj in mask_points]
+        self.mask_points = [obj.tolist() for obj in mask_points][0]
         self.boxes_points = boxes_points
         self.confidence = confidence
         self.color = color

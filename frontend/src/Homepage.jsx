@@ -75,7 +75,7 @@ function App() {
       color: "#ff0000",
       confidence: 1,
       object_name: label,
-      mask_points: [points]
+      mask_points: points
     }
     setObjects([...objects, newObject])
     setFiltered([...filtered, newObject])

@@ -18,7 +18,7 @@ const ImageDrawer = ({ refresh, objects, image, size, onNewPolygon }, ref) => {
         // polygon fill
         ctx.fillStyle = `${obj.color}40`
         ctx.beginPath()
-        for (let [x, y] of obj.mask_points[0]) {
+        for (let [x, y] of obj.mask_points) {
           ctx.lineTo(x, y)
         }
         ctx.fill()
@@ -32,7 +32,7 @@ const ImageDrawer = ({ refresh, objects, image, size, onNewPolygon }, ref) => {
         // label text
         ctx.fillStyle = obj.color
         ctx.font = "20px Arial"
-        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1])
+        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0], obj.mask_points[0][1])
       }
     }
 

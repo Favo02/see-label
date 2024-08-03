@@ -20,10 +20,8 @@ curl -X POST -F "file=@/path/to/your/photo.jpeg" -H "Content-Type: multipart/for
 A Response would be an array of Detected objects like this:
 ```json
 {
-  "clsId": 0,
   "object_name": "person",
   "mask_points": [
-    [
       [
         4471.64990234375,
         2764.5
@@ -144,7 +142,6 @@ A Response would be an array of Detected objects like this:
         4574.25,
         2764.5
       ]
-    ]
   ],
   "boxes_points": [
     [
