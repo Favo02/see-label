@@ -1,7 +1,6 @@
 import ImageUploader from "./components/ImageUploader"
 import ImagePreview from "./components/ImagePreview"
 import ImageDrawer from "./components/ImageDrawer"
-import JsonUploader from "./components/JsonUploader"
 import React, { useState } from "react"
 import noIntersections from "shamos-hoey";
 
@@ -143,7 +142,7 @@ function App() {
       <div className="mx-auto max-w-[500px]">
         <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">To get started, please upload an image</h1>
 
-        <ImageUploader setFile={setImage} setSize={setImageSize} normalizeSize={normalizeSize} />
+        <ImageUploader setFile={setImage} setSize={setImageSize} setObjects={setObjects} setFiltered={setFiltered} normalizeSize={normalizeSize} />
 
         <h1 className="text-white text-md font-bold italic text-center py-4">NOTE: You will be able to import objects later</h1>
 
@@ -154,8 +153,6 @@ function App() {
             <span className="ms-3 text-lg font-bold text-white dark:text-gray-300">Normalize image size</span>
           </label>
         </div>
-
-        <JsonUploader setFile={setImage} setSize={setImageSize} setObjects={setObjects} />
       </div>
     )
   }
