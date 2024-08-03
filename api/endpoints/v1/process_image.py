@@ -1,5 +1,5 @@
 import logging
-
+import os
 from fastapi import APIRouter, File, UploadFile, Depends
 from starlette.responses import JSONResponse
 
@@ -19,6 +19,6 @@ async def process_image(file: UploadFile = File(...), request: ImageProcessReque
     # Get image in raw format
     image_data = await file.read()
 
-    results = model_service.get_image_elements(image_data, model_name=request.yolo_model_name,
+    results = model_service.get_image_elements(image_data, model_name=os.getenv("MODEL_NAME"),
                                                conf_threshold=request.confidence_threshold)
     return JSONResponse(content={"data": [obj.dict() for obj in results]})
