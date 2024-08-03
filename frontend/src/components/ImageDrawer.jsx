@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import Canvas from "react-canvas-polygons";
+import { useEffect, useState } from "react"
+import Canvas from "react-canvas-polygons"
 
 const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
 
   const [polygon, setPolygon] = useState()
-  const [tool, setTool] = useState("Line");
+  const [tool, setTool] = useState("Line")
 
   useEffect(() => {
     ref.cleanCanvas()
 
     setTool("Line")
-    const timeout = setTimeout(() => setTool("Polygon"), 50);
+    const timeout = setTimeout(() => setTool("Polygon"), 50)
 
 
     if (objects) {
@@ -20,26 +20,26 @@ const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
 
         // polygon fill
         ctx.fillStyle = `${obj.color}40`
-        ctx.beginPath();
+        ctx.beginPath()
         for (let [x, y] of obj.mask_points[0]) {
-          ctx.lineTo(x, y);
+          ctx.lineTo(x, y)
         }
-        ctx.fill();
-        ctx.closePath();
+        ctx.fill()
+        ctx.closePath()
 
         // outline
-        ctx.strokeStyle = obj.color;
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.strokeStyle = obj.color
+        ctx.lineWidth = 2
+        ctx.stroke()
 
         // label text
         ctx.fillStyle = obj.color
-        ctx.font = "20px Arial";
-        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
+        ctx.font = "20px Arial"
+        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1])
       }
     }
 
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(timeout)
 
   }, [objects])
 
@@ -57,7 +57,7 @@ const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
         initialData={polygon}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ImageDrawer;
+export default ImageDrawer

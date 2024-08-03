@@ -1,55 +1,56 @@
-import React from "react";
+import React from "react"
 
 function ImageUploader({ setFile, setSize, normalizeSize }) {
 
+  // scale down image if too big (and normalizeSize flag on)
   function handleChange(e) {
 
-    const MAX_WIDTH = 1000;
-    const MAX_HEIGHT = 1000;
+    const MAX_WIDTH = 1000
+    const MAX_HEIGHT = 1000
 
-    const file = e.target.files[0];
-    const img = new Image();
-    const reader = new FileReader();
+    const file = e.target.files[0]
+    const img = new Image()
+    const reader = new FileReader()
 
     reader.onload = function (e) {
-      img.src = e.target.result;
+      img.src = e.target.result
       img.onload = function () {
-        let width = img.width;
-        let height = img.height;
+        let width = img.width
+        let height = img.height
 
         if (normalizeSize) {
           if (width > height) {
             if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
+              height *= MAX_WIDTH / width
+              width = MAX_WIDTH
             }
           } else {
             if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
+              width *= MAX_HEIGHT / height
+              height = MAX_HEIGHT
             }
           }
         }
 
         setSize({"w": width, "h": height})
 
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        const canvas = document.createElement("canvas")
+        canvas.width = width
+        canvas.height = height
 
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
+        const ctx = canvas.getContext("2d")
+        ctx.drawImage(img, 0, 0, width, height)
 
         canvas.toBlob(function (blob) {
           setFile({
             url: URL.createObjectURL(blob),
             blob: blob,
-          });
-        }, file.type);
-      };
-    };
+          })
+        }, file.type)
+      }
+    }
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file)
   }
 
   return (
@@ -65,7 +66,7 @@ function ImageUploader({ setFile, setSize, normalizeSize }) {
         <input id="dropzone-file" type="file" className="hidden" onChange={handleChange} />
       </label>
     </div>
-  );
+  )
 }
 
-export default ImageUploader;
+export default ImageUploader

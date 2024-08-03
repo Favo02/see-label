@@ -1,7 +1,7 @@
 import ImageUploader from "./components/ImageUploader"
 import ImagePreview from "./components/ImagePreview"
-import ImageDrawer from "./components/ImageDrawer";
-import React, { useState } from "react";
+import ImageDrawer from "./components/ImageDrawer"
+import React, { useState } from "react"
 
 const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
 
@@ -23,32 +23,32 @@ function App() {
   }
 
   async function apiCall() {
-    if (!image) return;
+    if (!image) return
 
-    const formData = new FormData();
-    formData.append("file", image.blob);
+    const formData = new FormData()
+    formData.append("file", image.blob)
 
     try {
       setLoading(true)
       const response = await fetch(API_ENDPOINT, {
         method: "POST",
         body: formData,
-      });
+      })
 
       if (response.ok) {
         const data = await response.json()
         setObjects(data.data)
         setFiltered(data.data)
       } else {
-        alert("Error sending file");
+        alert("Error sending file")
       }
     } catch (e) {
-      alert("Error sending file");
+      alert("Error sending file")
       console.log(e)
     } finally {
       setLoading(false)
     }
-  };
+  }
 
   function newDrawnPolygon(data) {
     const label = prompt("Insert label")
@@ -68,10 +68,10 @@ function App() {
   }
 
   function updateFilters(objectName) {
-    if (filtered.find(obj => obj.object_name == objectName)) {
-      setFiltered(filtered.filter(obj => obj.object_name != objectName))
+    if (filtered.find(obj => obj.object_name === objectName)) {
+      setFiltered(filtered.filter(obj => obj.object_name !== objectName))
     } else {
-      setFiltered([...filtered, ...objects.filter(obj => obj.object_name == objectName)])
+      setFiltered([...filtered, ...objects.filter(obj => obj.object_name === objectName)])
     }
   }
 
@@ -163,11 +163,11 @@ function App() {
 
           {objects.reduce((uniqueObjects, obj) => {
             if (!uniqueObjects.find(o => o.object_name === obj.object_name)) {
-              uniqueObjects.push(obj);
+              uniqueObjects.push(obj)
             }
-            return uniqueObjects;
+            return uniqueObjects
           }, []).map(obj => (
-            <h2 key={obj.object_name} onClick={() => updateFilters(obj.object_name)} className={`cursor-pointer text-2xl italic text-white text-center ${filtered.find(obj2 => obj2.object_name == obj.object_name) ? "" : "line-through"}`}>
+            <h2 key={obj.object_name} onClick={() => updateFilters(obj.object_name)} className={`cursor-pointer text-2xl italic text-white text-center ${filtered.find(obj2 => obj2.object_name === obj.object_name) ? "" : "line-through"}`}>
               {objects.filter(o => o.object_name === obj.object_name).length}x {obj.object_name.toUpperCase()}
             </h2>
           ))}
@@ -179,4 +179,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
