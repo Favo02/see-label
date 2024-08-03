@@ -5,7 +5,7 @@ from typing import List
 from PIL import Image
 from ultralytics import YOLO
 
-from dto.DetectedObject import DetectedObject
+from dto.detected_object import DetectedObject
 from services.color_service import ColorService
 
 

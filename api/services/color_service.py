@@ -49,8 +49,8 @@ class ColorService:
         extended_colors = []
 
         for i in range(self.num_colors):
-            color_idx = (i + 1) % num_base_colors
-            variation = (i + 1) // num_base_colors
+            color_idx = (i + 5) % num_base_colors
+            variation = (i + 5) // num_base_colors
             base_color = np.array(tab20[color_idx])
             varied_color = (base_color + np.array([variation * 0.1, 0, 0])) % 1.0
             hex_color = self.rgb_to_hex(varied_color)
@@ -95,4 +95,4 @@ class ColorService:
         """
         if index < 0 or index >= self.num_colors:
             raise ValueError("Index out of range. Must be between 0 and {}.".format(self.num_colors - 1))
-        return self.colors[index]
+        return self.colors[int(index)]
