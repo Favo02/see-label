@@ -1,23 +1,20 @@
 import { useEffect, useState } from "react"
 import Canvas from "react-canvas-polygons"
 
-const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
+const ImageDrawer = ({ refresh, objects, image, size, onNewPolygon }, ref) => {
 
   const [polygon, setPolygon] = useState()
   const [tool, setTool] = useState("Line")
 
   useEffect(() => {
     ref.cleanCanvas()
-
     setTool("Line")
     const timeout = setTimeout(() => setTool("Polygon"), 50)
-
 
     if (objects) {
       const ctx = ref.ctx
 
       for (let obj of objects) {
-
         // polygon fill
         ctx.fillStyle = `${obj.color}40`
         ctx.beginPath()
@@ -41,7 +38,7 @@ const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
 
     return () => clearTimeout(timeout)
 
-  }, [objects])
+  }, [objects, refresh])
 
   return (
     <div className="mx-auto flex justify-center">

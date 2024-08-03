@@ -2,8 +2,9 @@ import ImageUploader from "./components/ImageUploader"
 import ImagePreview from "./components/ImagePreview"
 import ImageDrawer from "./components/ImageDrawer"
 import React, { useState } from "react"
+import noIntersections from "shamos-hoey";
 
-const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
+const API_ENDPOINT = "http://172.17.0.2:8000/api/v1/image-data"
 
 function App() {
   const [image, setImage] = useState() // image to elaborate (uploaded by user)
@@ -11,6 +12,7 @@ function App() {
   const [normalizeSize, setNormalizeSize] = useState(true) // if preferred to downscale the image
 
   const [objects, setObjects] = useState() // objects detected in image
+  const [refresh, setRefresh] = useState(false) // property to force a refresh of the canvas
   const [filtered, setFiltered] = useState() // objects currently active (with filters)
   const [confidence, setConfidence] = useState(0.5) // confidence interval (a filter)
 
@@ -50,13 +52,30 @@ function App() {
     }
   }
 
+  function checkValidPolygon(points) {
+    const box = {type: 'Polygon', coordinates: [points]}
+    return noIntersections(box)
+  }
+
   function newDrawnPolygon(data) {
-    const label = prompt("Insert label")
+    const points = data[Object.keys(data).find(key => key.startsWith("Polygon"))];
+    if(!checkValidPolygon(points)){
+      alert("The polygon is not valid");
+      const testObject = {
+          color: "#ff0000",
+          confidence: 1,
+          object_name: "TESTING",
+          mask_points: []
+      };
+      setRefresh(!refresh);
+      return;
+    }
+    const label = prompt("Insert label");
     const newObject = {
       color: "#ff0000",
       confidence: 1,
       object_name: label,
-      mask_points: [data[Object.keys(data).find(key => key.startsWith("Polygon"))]]
+      mask_points: [points]
     }
     setObjects([...objects, newObject])
     setFiltered([...filtered, newObject])
@@ -145,7 +164,7 @@ function App() {
       <div className="w-full flex flex-row mt-4">
 
         <div className="w-2/3">
-          <ImageDrawer objects={filtered} image={image.url} size={imageSize} onNewPolygon={newDrawnPolygon} />
+          <ImageDrawer refresh={refresh} objects={filtered} image={image.url} size={imageSize} onNewPolygon={newDrawnPolygon} />
         </div>
 
         <div className="w-1/3">
