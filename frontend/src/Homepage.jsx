@@ -94,6 +94,31 @@ function App() {
     }
   }
 
+  async function exportImageObjects(withImage) {
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    let obj
+    if (withImage) {
+      const base64 = await blobToBase64(image.blob)
+      obj = { "image": base64, "objects": filtered }
+    } else {
+      obj = { "objects": filtered }
+    }
+    const json = JSON.stringify(obj) + "\n"
+
+    const a = document.createElement("a")
+    a.href = `data:text/json;charset=utf-8,${encodeURIComponent(json)}`
+    a.download = withImage ? "image-objects.json" : "objects.json"
+    a.click()
+  }
+
   if (!image) {
     return (
       <div className="mx-auto max-w-[500px]">
@@ -155,8 +180,11 @@ function App() {
       <h1 className="text-white text-3xl font-bold text-center pt-6 pb-4">Click on the image to manually add polygons or Apply some filters</h1>
 
       <div className="mx-auto flex flex-row justify-center align-center items-center gap-2">
-        <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json" className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export Objects only (JSON)</a>
-        <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json" className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export Image + Objects (JSON)</a>
+
+        <button onClick={() => exportImageObjects(false)} className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export Objects only (JSON)</button>
+
+        <button onClick={() => exportImageObjects(true)} className="text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 rounded-lg text-sm px-5 py-2.5">Export Image + Objects (JSON)</button>
+
         <button onClick={reset} className="text-white text-lg font-bold bg-red-700 hover:bg-red-800 rounded-lg text-sm px-5 py-2.5">Reset</button>
       </div>
       <h1 className="text-white text-md font-bold italic text-center pt-2">NOTE: Only objects NOT filtered out will be exported</h1>
