@@ -1,53 +1,51 @@
 import { useEffect, useState } from "react";
 import Canvas from "react-canvas-polygons";
 
-const ImageDrawer = ({ objects, newObjects, onNewObject, image, size }, ref) => {
+const ImageDrawer = ({ objects, image, size, onNewPolygon }, ref) => {
 
-  useEffect(() => {
-    if (!objects.data) return;
-
-    const ctx = ref.ctx
-
-    for (let obj of objects.data) {
-      ctx.beginPath();
-      ctx.fillStyle = `${obj.color}40`
-      for (let [x, y] of obj.mask_points[0]) {
-        ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.strokeStyle = obj.color;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.font = "20px Arial";
-      ctx.fillStyle = obj.color;
-      ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
-    }
-  }, [])
-
+  const [polygon, setPolygon] = useState()
   const [tool, setTool] = useState("Line");
-  const handleCleanCanva = (e) => {
-    e.stopPropagation();
-    ref.cleanCanvas();
-    setTool("Line");
-    const timeout = setTimeout(() => setTool("Polygon"), 50);
-    return () => clearTimeout(timeout);
-  };
+
   useEffect(() => {
+    ref.cleanCanvas()
+
+    setTool("Line")
     const timeout = setTimeout(() => setTool("Polygon"), 50);
+
+
+    if (objects) {
+
+      for (let obj of objects) {
+        const ctx = ref.ctx
+        ctx.beginPath();
+
+        ctx.fillStyle = obj.color
+        ctx.font = "20px Arial";
+        ctx.fillText(`${obj.object_name} (${obj.confidence.toFixed(2)})`, obj.mask_points[0][0][0], obj.mask_points[0][0][1]);
+
+        console.log("A", ctx.fillStyle)
+
+        ctx.fillStyle = obj.color + "40"
+        for (let [x, y] of obj.mask_points[0]) {
+          ctx.lineTo(x, y);
+        }
+        ctx.fill();
+        // ctx.closePath();
+
+        console.log("B", ctx.fillStyle)
+
+        ctx.strokeStyle = obj.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+
     return () => clearTimeout(timeout);
-  }, []);
+
+  }, [objects])
+
   return (
-    <div>
-      <button
-        variant="outlined"
-        style={{ marginBottom: "20px" }}
-        onClick={handleCleanCanva}
-      >
-        Clean Canvas
-      </button>
+    <div className="mx-auto flex justify-center">
       <Canvas
         id="canvas"
         ref={(canvas) => (ref = canvas)}
@@ -55,9 +53,9 @@ const ImageDrawer = ({ objects, newObjects, onNewObject, image, size }, ref) => 
         height={size.h}
         width={size.w}
         tool={tool}
-        onDataUpdate={(data) => onNewObject(data)}
-        onFinishDraw={(data) => onNewObject(data)}
-        initialData={newObjects}
+        onDataUpdate={(data) => setPolygon(data)}
+        onFinishDraw={() => onNewPolygon(polygon)}
+        initialData={polygon}
       />
     </div>
   );

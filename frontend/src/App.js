@@ -7,11 +7,10 @@ const API_ENDPOINT = "http://localhost:8000/api/v1/image-data"
 const buttonStyle = "text-white text-lg font-bold bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800"
 
 function App() {
-  const [normalizeSize, setNormalizeSize] = useState(true)
   const [file, setFile] = useState();
   const [size, setSize] = useState();
+  const [normalizeSize, setNormalizeSize] = useState(true)
   const [objects, setObjects] = useState();
-  const [newObjects, setNewObjects] = useState();
 
   async function sendFile() {
     if (!file) return;
@@ -27,7 +26,7 @@ function App() {
 
       if (response.ok) {
         const data = await response.json()
-        setObjects(data)
+        setObjects(data.data)
       } else {
         alert("Error sending file");
       }
@@ -41,7 +40,18 @@ function App() {
     setFile(undefined)
     setSize(undefined)
     setObjects(undefined)
-    setNewObjects(undefined)
+  }
+
+  function test(data) {
+    console.log("data", data)
+    const label = prompt("Insert label")
+    const newObject = {
+      color: "#f00",
+      confidence: 1,
+      object_name: label,
+      mask_points: [data[Object.keys(data).find(key => key.startsWith("Polygon"))]]
+    }
+    setObjects([...objects, newObject])
   }
 
   return (
@@ -63,14 +73,12 @@ function App() {
       )}
 
       {(file && !objects) && (
-        <div>
+        <div className="mx-auto">
           <div className="my-10 mx-auto flex flex-row justify-center align-center items-center gap-2">
             <button onClick={sendFile} className={buttonStyle}>Analyze image: extract objects</button>
             <button className={buttonStyle}>Import analyzed objects</button>
             <button onClick={() => setObjects([])} className={buttonStyle}>Manually select objects</button>
           </div>
-
-          <h1 className="text-white">Image uploaded successfully</h1>
           <ImagePreview image={file.url} />
         </div>
       )}
@@ -78,9 +86,12 @@ function App() {
 
       {(file && objects) && (
         <div>
-          <ImageDrawer objects={objects} newObjects={newObjects} onNewObject={setNewObjects} image={file.url} size={size} />
+          <div className="my-10 mx-auto flex flex-row justify-center align-center items-center gap-2">
+            <button onClick={reset} className={buttonStyle}>Reset</button>
+          </div>
 
-          <button onClick={reset} className={buttonStyle}>Reset</button>
+          <ImageDrawer objects={objects} image={file.url} size={size} onNewPolygon={test} />
+
         </div>
       )}
     </div>
