@@ -72,7 +72,7 @@ function App() {
 
   return (
     <div className="min-h-screen min-w-screen bg-gradient-to-r from-slate-900 to-sky-950 p-10">
-      <h1 className="text-7xl font-black text-white w-full text-center">See Label</h1>
+      <h1 className="text-5xl font-black text-white w-full text-center">See Label</h1>
 
       {!file && (
         <div className="mx-auto max-w-[500px]">
@@ -91,9 +91,9 @@ function App() {
       {(file && !objects) && (
         <div className="mx-auto">
           <div className="my-10 mx-auto flex flex-row justify-center align-center items-center gap-2">
-            <button onClick={sendFile} className={buttonStyle}>Analyze image: extract objects</button>
-            <button className={buttonStyle}>Import analyzed objects</button>
+            <button onClick={sendFile} className={buttonStyle}>Automatically extract objects</button>
             <button onClick={() => { setObjects([]); setFiltered([])} } className={buttonStyle}>Manually select objects</button>
+            <button className={buttonStyle}>Import analyzed objects</button>
           </div>
           <ImagePreview image={file.url} />
         </div>
@@ -103,6 +103,7 @@ function App() {
         <div>
           <div className="my-10 mx-auto flex flex-row justify-center align-center items-center gap-2">
             <button onClick={reset} className={buttonStyle}>Reset</button>
+            <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(filtered))}`} download="objects.json" className={buttonStyle}>Export Objects</a>
           </div>
           <div className="w-full flex flex-row">
 
@@ -116,7 +117,7 @@ function App() {
               <div>
                 <div className="text-center">
                   <h2 className="text-white text-2xl font-bold mb-4">Confidence treshold: {confidence}</h2>
-                  <input type="range" min={0.25} max={1} value={confidence} step="0.01" onChange={(e) => updateConfidence(e.target.value)} class="text-center w-1/2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
+                  <input type="range" min={0.25} max={1} value={confidence} step="0.01" onChange={(e) => updateConfidence(e.target.value)} className="text-center w-1/2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
                 </div>
               </div>
 
@@ -129,7 +130,7 @@ function App() {
                 }
                 return uniqueObjects;
               }, []).map(obj => (
-                <h2 onClick={() => updateFilters(obj.object_name)} className={`text-2xl italic text-white text-center ${filtered.find(obj2 => obj2.object_name == obj.object_name) ? "font-bold" : "line-through"}`}>
+                <h2 key={obj.object_name} onClick={() => updateFilters(obj.object_name)} className={`text-2xl italic text-white text-center ${filtered.find(obj2 => obj2.object_name == obj.object_name) ? "font-bold" : "line-through"}`}>
                   {objects.filter(o => o.object_name === obj.object_name).length}x {obj.object_name.toUpperCase()}
                 </h2>
               ))}
